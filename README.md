@@ -96,4 +96,21 @@ Here are all the columns of the cleaned df.
 | `'saturated fat (PDV)'` | float64        |
 | `'carbohydrates (PDV)'` | float64        |
 
+Our cleaned dataframe ended up with 234429 rows and 24 columns. Here are the first 5 rows of ~unique recipes of our cleaned dataframe for illustration. Since there is a lot of columns for the merged dataframe, we selected the columns that are most relevant to our questions for display. Scroll right to view more columns.
 
+| name                                 |     id |   minutes | submitted           |   rating |   average rating |   calories (#) |   sugar (PDV) |
+|:-------------------------------------|-------:|----------:|:--------------------|---------:|-----------------:|---------------:|--------------:|
+| 1 brownies in the world    best ever | 333281 |        40 | 2008-10-27 00:00:00 |        4 |                4 |          138.4 |            50 |
+| 1 in canada chocolate chip cookies   | 453467 |        45 | 2011-04-11 00:00:00 |        5 |                5 |          595.1 |           211 |
+| 412 broccoli casserole               | 306168 |        40 | 2008-05-30 00:00:00 |        5 |                5 |          194.8 |             6 |
+| millionaire pound cake               | 286009 |       120 | 2008-02-12 00:00:00 |        5 |                5 |          878.3 |           326 |
+| 2000 meatloaf                        | 475785 |        90 | 2012-03-06 00:00:00 |        5 |                5 |          267   |            12 |
+
+### Univariate Analysis
+
+<iframe
+  src="assets/fig1.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
