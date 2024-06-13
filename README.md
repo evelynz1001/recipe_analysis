@@ -64,7 +64,11 @@ The second dataset, `interactions`, contains 731927 rows and each row contains a
 
 7. Drop Unnecessary Columns
 
-	- since we already seperate the nutrition columns into more detailed columns, we don't need to `'nutrition'` columns anymore. 
+	- since we already seperate the nutrition columns into more detailed columns, we don't need to `'nutrition'` columns anymore.
+
+8. Remove outliers in the cooking time
+   
+   	-  When we attempted to plot the graph, we figured that there are outliers that influence the whole dataset, so we create quartile to establish thresholds beyond which data points are considered outliers. We identified the outliers using the IQR method. 
 
 #### Result
 Here are all the columns of the cleaned df.
@@ -108,9 +112,121 @@ Our cleaned dataframe ended up with 234429 rows and 24 columns. Here are the fir
 
 ### Univariate Analysis
 
+For this analysis, we examine the distribution of cooking time.
+
 <iframe
   src="assets/fig1.html"
   width="800"
   height="600"
   frameborder="0"
 ></iframe>
+
+<iframe
+  src="assets/fig2.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+### Bivariate Analysis
+
+<iframe
+  src="assets/fig3.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="assets/fig4.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+### Interesting Aggregates
+
+For this section, we investigated the relationship between the cooking time in minutes and ratings of the recipes. First, we created a small dataframe, `'pivot_table'` to store the cooking time in minutes without outliers. 
+
+| cooking_time_range | avg_rating |
+| -----------------: | ---------: |
+|       0-20         |   4.705120 |
+|       20-40        |   4.674040 |
+|       40-60        |   4.663482 |
+|       60-80        |   4.679378 |
+|       80-100       |   4.667133 |
+|     100-120        |   4.677711 |
+
+## Assessment of Missingness
+
+If users chose not to rate a recipe, possibly due to dissatisfaction or indifference, and this resulted in ratings being recorded as np.nan, the data could be considered Not Missing At Random (NMAR).
+
+Conversely, the "review" column could provide additional context. If users encountered issues with the recipe and failed to complete it, they might not provide a rating but could leave a comment explaining their difficulties. In such cases, the missing ratings could be considered Missing At Random (MAR).
+
+### Missingness Dependency
+
+???
+
+## Hypothesis Testing
+
+**Null Hypothesis:**  more cooking time of the recipe in minutes tend to have higher rating.
+
+**Alternative Hypothesis:** more cooking time of the recipe in minutes tend to have same ratings.
+
+**Test Statistic:** The difference in mean between high rating of recipes and same rating of recipes.
+
+**Significance Level:** 0.05
+
+To run the test, we first split the data points into two groups: recipes with shorter cooking times (less than or equal to the median cooking time) and recipes with longer cooking times (greater than the median cooking time).
+
+Observed Statistic: The difference in mean ratings between the two groups is 0.0266.
+Next, we shuffled the ratings 1000 times to collect 1000 simulated mean differences between the two distributions as described in the test statistic.
+
+#### Conclusion of Permutation Test
+
+P-value: We obtained a p-value of 0.0, indicating that there is a significant difference in how users rate recipes with different cooking times.
+
+## Framing a Prediction Problem
+
+For this project, we aim to predict the average rating of recipes using their characteristics. We have chosen the sugar (PDV) column as a key feature for our prediction model for the following reasons:
+
+The sugar (PDV) column is numerical, making it suitable for regression models.
+
+Sugar content significantly affects both the taste and healthiness of recipes, which likely impacts user ratings.
+
+The sugar (PDV) column is consistently available in the dataset, ensuring a robust training set.
+
+## Baseline Model
+
+For this project, we aim to predict the average rating of recipes using their characteristics. We have chosen the sugar (PDV) column as a key feature for our prediction model for the following reasons:
+
+Numerical Suitability: The sugar (PDV) column is numerical, making it suitable for regression models.
+Impact on Ratings: Sugar content significantly affects both the taste and healthiness of recipes, which likely impacts user ratings.
+Data Availability: The sugar (PDV) column is consistently available in the dataset, ensuring a robust training set.
+
+## Final Model
+
+## Fairness Analysis
+
+We categorized the dataset into two groups based on the value of n_steps:
+
+Less Steps Group: This group includes observations where the number of steps (n_steps) is less than or equal to the median number of steps.
+More Steps Group: This group consists of observations where the number of steps is greater than the median.
+
+**Null Hypothesis**: there is no difference in the predictability (as measured by R²) of the outcome between the two groups. This would suggest that the number of steps does not influence the fairness of the predictions.
+
+**Alternative Hypothesis**: there is a significant difference in R² between the two groups, indicating that the number of steps affects the predictability of the outcome and, consequently, the fairness of the predictions.
+
+**Test Statistic**: Difference in precision (low sugar - high sugar)
+
+**Significance Level**: 0.05
+
+1. Determine the median number of steps in the recipes. This value is used to split the dataset into two groups: recipes with steps less than or equal to the median and recipes with steps greater than the median.
+2. Evaluate the model on the two groups and calculate the observed difference in RMSE between the two groups.
+   - less and more represent the models trained on the subsets of the data.
+   - obs_rmse_diff stores the absolute difference in RMSE between the two groups.
+3. Randomly shuffle the n_steps column and calculate the difference in RMSE for each permutation.
+
+The p-value of 0.04 indicates that there is a 4% chance that the observed difference in RMSE between the two groups (recipes with fewer steps vs. recipes with more steps) could have occurred by random chance. Since the p-value is less than the commonly used significance level of 0.05, we can conclude that the difference in RMSE is statistically significant.
+
+This permutation test shows that the number of steps in a recipe has a significant effect on the RMSE of the prediction model. The observed RMSE difference between recipes with fewer steps and those with more steps is unlikely to have occurred by chance, as indicated by the low p-value of 0.04. This suggests that the complexity of a recipe, as measured by the number of steps, plays a significant role in the model's prediction accuracy.
