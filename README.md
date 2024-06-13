@@ -165,7 +165,52 @@ Conversely, the "review" column could provide additional context. If users encou
 
 ### Missingness Dependency
 
-???
+Distribution of Minutes by Missingness of Rating
+
+**Null Hypothesis:**  The missingness of ratings does not depend on the minutes in the recipe.
+
+**Alternative Hypothesis:** The missingness of ratings does depend on the minutes in the recipe.
+
+**Test Statistic:**  
+
+**Significance Level:** 0.05
+
+<iframe
+  src="assets/fig5.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+We ran a permutation test by shuffling the missingness of rating for 1000 times to collect 1000 simulating mean differences in the two distributions. 
+
+<iframe
+  src="assets/fig6.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Distribution of Calories by Missingness of Rating
+
+**Null Hypothesis:**  The missingness of ratings does not depend on the calories in the recipe.
+
+**Alternative Hypothesis:** The missingness of ratings does depend on the calories in the recipe.
+
+**Significance Level:** 0.05
+
+<iframe
+  src="assets/fig7.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Result: 
+{'minutes': {'Observed Statistic': 51.45237039852127, 'P-Value': 0.118},
+ 'calories (#)': {'Observed Statistic': 69.00722806375853, 'P-Value': 0.0}}
+
+The permutation test results suggest that the missingness of the "rating" column may not depend significantly on the "minutes" column (P-value > 0.05). However, the missingness appears to depend on the "total fat (PDV)" column (P-value = 0.0).
 
 ## Hypothesis Testing
 
