@@ -165,7 +165,54 @@ Conversely, the "review" column could provide additional context. If users encou
 
 ### Missingness Dependency
 
-???
+Distribution of Minutes by Missingness of Rating
+
+**Null Hypothesis:**  The missingness of ratings does not depend on the minutes in the recipe.
+
+**Alternative Hypothesis:** The missingness of ratings does depend on the minutes in the recipe.
+
+**Test Statistic:** difference in means of minutes between the two groups (rating missing and not missing)
+
+**Significance Level:** 0.05
+
+<iframe
+  src="assets/fig5.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+We ran a permutation test by shuffling the missingness of rating for 1000 times to collect 1000 simulating mean differences in the two distributions. 
+
+<iframe
+  src="assets/fig6.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Distribution of Calories by Missingness of Rating
+
+**Null Hypothesis:**  The missingness of ratings does not depend on the calories in the recipe.
+
+**Alternative Hypothesis:** The missingness of ratings does depend on the calories in the recipe.
+
+**Test Statistic:** difference in means of calories between the two groups (rating missing and not missing)
+
+**Significance Level:** 0.05
+
+<iframe
+  src="assets/fig7.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Result: 
+{'minutes': {'Observed Statistic': 51.45237039852127, 'P-Value': 0.118},
+ 'calories (#)': {'Observed Statistic': 69.00722806375853, 'P-Value': 0.0}}
+
+The permutation test results suggest that the missingness of the "rating" column may not depend significantly on the "minutes" column (P-value > 0.05). However, the missingness appears to depend on the "total fat (PDV)" column (P-value = 0.0).
 
 ## Hypothesis Testing
 
@@ -205,6 +252,38 @@ Impact on Ratings: Sugar content significantly affects both the taste and health
 Data Availability: The sugar (PDV) column is consistently available in the dataset, ensuring a robust training set.
 
 ## Final Model
+
+Features:
+'n_ingredients':
+
+Reason for Inclusion: The number of ingredients in a recipe can impact its complexity and the perceived effort required to prepare it. Recipes with more ingredients might be seen as more complex and could influence user ratings.
+'calories (#)':
+
+Reason for Inclusion: The total calorie content of a recipe is a significant factor for many users, especially those who are health-conscious. Recipes with lower calories might be rated higher due to health benefits. We standardized this feature using StandardScaler to handle outliers and ensure comparability.
+'total fat (PDV)':
+
+Reason for Inclusion: Similar to calories, the fat content of a recipe is crucial for health-conscious users. Standardizing this feature ensures that it is on a comparable scale with other numerical features.
+'protein (PDV)':
+
+Reason for Inclusion: Protein content is an important nutritional aspect, especially for those focusing on muscle building or weight management. Standardizing this feature helps in making it comparable with other nutritional values.
+'minutes':
+
+Reason for Inclusion: The cooking time of the recipe in minutes is an essential feature as it can indicate the complexity and effort required for a recipe. Recipes that take longer to cook might receive lower ratings due to the time investment required. We used StandardScaler to standardize this feature to ensure comparability across different recipes.
+Modeling Algorithm and Hyperparameters:
+Algorithm: Linear Regression
+Hyperparameters Tuned: Linear Regression has limited hyperparameters, so our focus was on feature engineering and preprocessing.
+Method for Hyperparameter Tuning: Not applicable due to the nature of Linear Regression.
+Improvement over Baseline Model:
+The final model's performance shows a slight improvement over the baseline model in terms of R² and RMSE:
+
+Baseline Model Performance:
+
+RMSE: 107.18
+R²: 0.73
+Final Model Performance:
+
+RMSE (Test): 110.32
+R² (Test): 0.70
 
 ## Fairness Analysis
 
